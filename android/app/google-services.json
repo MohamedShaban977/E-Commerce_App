@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "560366266646",
+    "project_id": "e-commerce-buyit",
+    "storage_bucket": "e-commerce-buyit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560366266646:android:807fd932eb1b2ad8848837",
+        "android_client_info": {
+          "package_name": "com.example.e_commerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560366266646-t1f4d81i8ck8a7kcqtdtnj5ugvvt89nv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.e_commerce",
+            "certificate_hash": "f5fe1f6489985baa4fe31f904c4ecbe0e1df58ff"
+          }
+        },
+        {
+          "client_id": "560366266646-jqaedpjdjqoqrbngqvpqpds668shpcb2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWYtkINkQe970wmID-n_YAIcJaSmeH-8k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560366266646-jqaedpjdjqoqrbngqvpqpds668shpcb2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
