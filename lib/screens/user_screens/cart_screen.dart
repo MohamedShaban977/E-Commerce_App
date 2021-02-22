@@ -21,232 +21,266 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-
-    return Scaffold(
-        backgroundColor: kBackgroundColor,
-        appBar: AppBar(
-          centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Icon(
-                FontAwesomeIcons.store,
-                color: kMainColor,
+    return LayoutBuilder(builder: (context, con) {
+      final height = MediaQuery.of(context).size.height;
+      final width = MediaQuery.of(context).size.width;
+      final heightLocal = con.maxHeight;
+      final widthLocal = con.maxWidth;
+      return Scaffold(
+          backgroundColor: kBackgroundColor,
+          appBar: AppBar(
+            centerTitle: true,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: Icon(
+                  FontAwesomeIcons.store,
+                  color: kMainColor,
+                  size: widthLocal * 0.04,
+                ),
               ),
+            ],
+            title: Text(
+              'My Cart',
+              style: TextStyle(fontSize: widthLocal * 0.04, color: kMainColor),
             ),
-          ],
-          title: Text(
-            'My Cart',
-            style: TextStyle(fontSize: 25, color: kMainColor),
+            backgroundColor: kScandColor,
+            // elevation: 0,
           ),
-          backgroundColor: kScandColor,
-          // elevation: 0,
-        ),
-        body: FutureBuilder<List<ProductModel>>(
-            future: Provider.of<CartItem>(context, listen: false).gatAllCArt(),
-            builder: (context, snapshot) {
-              List<ProductModel> listCart = snapshot.data;
-              totalPrice = Provider.of<CartItem>(context).getTotalPrice();
-              totalQuantity = Provider.of<CartItem>(context).getAllQuantity();
-              if (snapshot.hasData) {
-                if (listCart == null || listCart.isEmpty || listCart == []) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(image: AssetImage('images/empty-cart.png')),
-                      ],
-                    ),
-                  );
-                } else {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                            itemCount: listCart.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: width,
-                                      // height: height * 0.1,
-                                      decoration: BoxDecoration(
-                                        color: kMainColor.withOpacity(0.5),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(1.0),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              child: Image(
-                                                image: NetworkImage(
-                                                    listCart[index]
-                                                        .pImageLocation),
-                                                fit: BoxFit.fill,
-                                                height: 120,
-                                                width: 100,
-                                              ),
-                                            ),
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  listCart[index].pName,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 22),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'Quantity : ' +
-                                                      listCart[index]
-                                                          .pQuantity
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'Price : ' +
-                                                      listCart[index]
-                                                          .pPrice
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          // SizedBox(
-                                          //   width: width * 0.15,
-
-                                          // ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            // crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  Provider.of<CartItem>(context,
-                                                          listen: false)
-                                                      .deleteProductToCart(
-                                                          listCart[index].pId);
-                                                  setState(() {});
-
-                                                  Navigator.pushNamed(
-                                                      context, ProductInfo.id,
-                                                      arguments:
-                                                          listCart[index]);
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Icon(
-                                                    Icons.mode_edit,
-                                                    color: Colors.black87
-                                                        .withOpacity(0.7),
-                                                    size: 30,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: height * 0.04,
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Provider.of<CartItem>(context,
-                                                          listen: false)
-                                                      .deleteProductToCart(
-                                                          listCart[index].pId);
-                                                  setState(() {});
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.red,
-                                                    size: 30,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
+          body: LayoutBuilder(
+            builder: (context, con) => FutureBuilder<List<ProductModel>>(
+                future:
+                    Provider.of<CartItem>(context, listen: false).gatAllCArt(),
+                builder: (context, snapshot) {
+                  List<ProductModel> listCart = snapshot.data;
+                  totalPrice = Provider.of<CartItem>(context).getTotalPrice();
+                  totalQuantity =
+                      Provider.of<CartItem>(context).getAllQuantity();
+                  if (snapshot.hasData) {
+                    if (listCart == null ||
+                        listCart.isEmpty ||
+                        listCart == []) {
+                      return Center(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Text(
-                                // 'yu',
-                                'Total Price : $totalPrice  LE',
-                                style: TextStyle(fontSize: 25),
-                              ),
-                            ),
-                            Builder(
-                              builder: (context) => ButtonCustomWidget(
-                                  textbutton: 'Order'.toUpperCase(),
-                                  onPressed: () async {
-                                    orderCart(context, listCart);
-                                  },
-                                  backgroundColor: kScandColor,
-                                  textColor: kMainColor),
-                            ),
+                            Image(image: AssetImage('images/empty-cart.png')),
                           ],
                         ),
-                      ),
-                    ],
-                  );
-                }
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }));
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: listCart.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: widthLocal,
+                                          // height: height * 0.1,
+                                          decoration: BoxDecoration(
+                                            color: kMainColor.withOpacity(0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(1.0),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  child: Image(
+                                                    image: NetworkImage(
+                                                        listCart[index]
+                                                            .pImageLocation),
+                                                    fit: BoxFit.fill,
+                                                    height: heightLocal * 0.25,
+                                                    width: widthLocal * 0.25,
+                                                  ),
+                                                ),
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Container(
+                                                      width: widthLocal * 0.4,
+                                                      child: Text(
+                                                        listCart[index].pName,
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              widthLocal * 0.04,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      'Quantity : ' +
+                                                          listCart[index]
+                                                              .pQuantity
+                                                              .toString(),
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            widthLocal * 0.04,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      'Price : ' +
+                                                          listCart[index]
+                                                              .pPrice
+                                                              .toString(),
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            widthLocal * 0.04,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              // SizedBox(
+                                              //   width: width * 0.15,
+
+                                              // ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                // crossAxisAlignment:
+                                                //     CrossAxisAlignment.center,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      Provider.of<CartItem>(
+                                                              context,
+                                                              listen: false)
+                                                          .deleteProductToCart(
+                                                              listCart[index]
+                                                                  .pId);
+                                                      setState(() {});
+
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          ProductInfo.id,
+                                                          arguments:
+                                                              listCart[index]);
+                                                    },
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Icon(
+                                                        Icons.mode_edit,
+                                                        color: Colors.black87
+                                                            .withOpacity(0.7),
+                                                        size: widthLocal * 0.04,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      height:
+                                                          heightLocal * 0.07),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Provider.of<CartItem>(
+                                                              context,
+                                                              listen: false)
+                                                          .deleteProductToCart(
+                                                              listCart[index]
+                                                                  .pId);
+                                                      setState(() {});
+                                                    },
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red,
+                                                        size: widthLocal * 0.04,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: widthLocal * 0.04,
+                                vertical: heightLocal * 0.01),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  // 'yu',
+                                  'Total Price : $totalPrice  LE',
+                                  style: TextStyle(fontSize: widthLocal * 0.04),
+                                ),
+                                Builder(
+                                  builder: (context) => ButtonCustomWidget(
+                                      textbutton: 'Order'.toUpperCase(),
+                                      fontSize: widthLocal * 0.04,
+                                      onPressed: () async {
+                                        orderCart(context, listCart);
+                                      },
+                                      backgroundColor: kScandColor,
+                                      textColor: kMainColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
+          ));
+    });
   }
 
   void orderCart(context, cartItem) {

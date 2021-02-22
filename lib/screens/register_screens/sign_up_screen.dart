@@ -3,7 +3,6 @@ import 'package:e_commerce/screens/user_screens/home_screen.dart';
 import 'package:e_commerce/services/auth.dart';
 import 'package:e_commerce/widgets/costum_text_form.dart';
 import 'package:e_commerce/widgets/cosume_buttom.dart';
-import 'package:e_commerce/widgets/weve.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -43,9 +42,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.black87,
@@ -53,158 +51,208 @@ class _SignUpScreenState extends State<SignUpScreen> {
       backgroundColor: Colors.white,
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<ModelHud>(context).isLoading,
-        child: ListView(
-          children: [
-            Form(
-              key: _globalKey,
-              child: Column(
-                children: [
-                  // CustomWeve(
-                  //   size: height * 0.00355,
-                  // ),
-                  CustomLogoWidget(height: height * 0.2, width: width),
-                  SizedBox(height: height * 0.01),
+        child: LayoutBuilder(builder: (context, con) {
+          final height = MediaQuery.of(context).size.height;
+          final width = MediaQuery.of(context).size.width;
+          final heightLocal = con.maxHeight;
+          final widthLocal = con.maxWidth;
 
-                  ///' name'
-                  CustomTextFormWidget(
-                    backgroundColor: kBackgroundColor,
-                    textColor: kMainColor,
-                    iconColor: kMainColor,
-                    onChanged: (value) {
-                      _name = value;
-                    },
-                    obscureText: false,
-                    // label: 'enter your name',
-                    hint: 'enter your name',
-                    iconData: Icons.person,
+          return ListView(
+            children: [
+              Container(
+                height: heightLocal,
+                decoration: BoxDecoration(
+                  color: kScandColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.elliptical(heightLocal, heightLocal),
+                    bottomRight: Radius.elliptical(heightLocal, heightLocal),
                   ),
-                  SizedBox(height: height * 0.02),
-
-                  /// ' Email'
-                  CustomTextFormWidget(
-                    backgroundColor: kBackgroundColor,
-                    textColor: kMainColor,
-                    iconColor: kMainColor,
-                    onChanged: (value) {
-                      _email = value;
-                    },
-                    obscureText: false,
-                    // label: 'enter your name',
-                    hint: 'enter your Email',
-                    iconData: Icons.email,
-                  ),
-                  SizedBox(height: height * 0.02),
-
-                  ///Password
-                  CustomTextFormWidget(
-                    backgroundColor: kBackgroundColor,
-                    textColor: kMainColor,
-                    iconColor: kMainColor,
-                    onChanged: (value) {
-                      _password = value;
-                    },
-                    obscureText: true,
-                    // label: 'enter your name',
-                    hint: 'enter your Password',
-                    iconData: Icons.lock,
-                  ),
-                  SizedBox(height: height * 0.02),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Row(
-                      children: [
-                        Checkbox(
-                            checkColor: kMainColor,
-                            activeColor: kScandColor,
-                            value: checkBox,
-                            onChanged: (value) {
-                              setState(() {
-                                checkBox = value;
-                              });
-                            }),
-                        Text('Remember me  ')
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: height * 0.02),
-
-                  /// Sign Up Button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: ButtonCustomWidget(
-                      textColor: kMainColor,
-                      backgroundColor: kScandColor,
-                      textbutton: 'Sign Up',
-                      onPressed: () async {
-                        final modelHud =
-                            Provider.of<ModelHud>(context, listen: false);
-                        modelHud.changeIsLoading(true);
-                        if (_globalKey.currentState.validate()) {
-                          if (checkBox == true) {
-                            await savePrefUser();
-                          }
-
-                          ///
-                          try {
-                            ///do something
-                            final authResult = await auth.signUp(
-                                _email.trim(), _password.trim());
-                            modelHud.changeIsLoading(false);
-
-                            Navigator.pushReplacementNamed(
-                                context, HomeScreen.id);
-                            print(authResult.user.email);
-                            print(authResult.user.uid);
-
-                            ///
-                          } catch (ex) {
-                            modelHud.changeIsLoading(false);
-
-                            var showToast = Fluttertoast.showToast(
-                              msg: ex.message.toString(),
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.BOTTOM,
-                              backgroundColor: Colors.white,
-                              textColor: Colors.black,
-                              timeInSecForIosWeb: 5,
-                              fontSize: 18,
-                            );
-                            return showToast;
-                          }
-                        }
-                        modelHud.changeIsLoading(false);
-                      },
-                    ),
-                  ),
-                  SizedBox(height: height * 0.03),
-
-                  ///Text( Do have an account ?)
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, LoginUserScreen.id);
-                    },
-                    child: Row(
-                      // crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                child: Form(
+                  key: _globalKey,
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: widthLocal * 0.05),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          'Do have an account ? ',
-                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                          'Sign Up  ',
+                          style: TextStyle(
+                              fontFamily: 'pacifico',
+                              fontSize: widthLocal * 0.1,
+                              color: Color(0xffE5B669)),
+                          textAlign: TextAlign.center,
                         ),
-                        Text(
-                          "Login",
-                          style: TextStyle(fontSize: 18, color: kMainColor),
-                        )
+                        // CustomLogoWidget(height: height * 0.2, width: width),
+                        // SizedBox(height: height * 0.01),
+                        SizedBox(height: height * 0.01),
+
+                        ///' name'
+                        CustomTextFormWidget(
+                          backgroundColor: kBackgroundColor,
+                          fontSize: widthLocal * 0.04,
+                          textColor: kScandColor.withOpacity(0.5),
+                          iconColor: kScandColor.withOpacity(0.5),
+                          onChanged: (value) {
+                            _name = value;
+                          },
+                          obscureText: false,
+                          // label: 'enter your name',
+                          hint: 'enter your name',
+                          iconData: Icons.person,
+                        ),
+                        // SizedBox(height: height * 0.02),
+
+                        /// ' Email'
+                        CustomTextFormWidget(
+                          backgroundColor: kBackgroundColor,
+                          fontSize: widthLocal * 0.04,
+                          textColor: kScandColor.withOpacity(0.5),
+                          iconColor: kScandColor.withOpacity(0.5),
+                          onChanged: (value) {
+                            _email = value;
+                          },
+                          obscureText: false,
+                          // label: 'enter your name',
+                          hint: 'enter your Email',
+                          iconData: Icons.email,
+                        ),
+                        // SizedBox(height: height * 0.02),
+
+                        ///Password
+                        CustomTextFormWidget(
+                          backgroundColor: kBackgroundColor,
+                          fontSize: widthLocal * 0.04,
+                          textColor: kScandColor.withOpacity(0.5),
+                          iconColor: kScandColor.withOpacity(0.5),
+                          onChanged: (value) {
+                            _password = value;
+                          },
+                          obscureText: true,
+                          // label: 'enter your name',
+                          hint: 'enter your Password',
+                          iconData: Icons.lock,
+                        ),
+                        // SizedBox(height: height * 0.02),
+
+                        Row(
+                          children: [
+                            Transform.scale(
+                              scale: widthLocal * 0.0025,
+                              child: Theme(
+                                data: ThemeData(
+                                    unselectedWidgetColor: Colors.white),
+                                child: Checkbox(
+                                    checkColor: kScandColor,
+                                    activeColor: Colors.white,
+                                    value: checkBox,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        checkBox = value;
+                                      });
+                                    }),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthLocal * 0.04),
+                              child: Text(
+                                'Remember me',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: widthLocal * 0.04,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // SizedBox(height: height * 0.02),
+
+                        /// Sign Up Button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: ButtonCustomWidget(
+                            fontSize: widthLocal * 0.04,
+                            textColor: kScandColor,
+                            backgroundColor: kMainColor,
+                            textbutton: 'Sign Up',
+                            onPressed: () async {
+                              final modelHud =
+                                  Provider.of<ModelHud>(context, listen: false);
+                              modelHud.changeIsLoading(true);
+                              if (_globalKey.currentState.validate()) {
+                                if (checkBox == true) {
+                                  await savePrefUser();
+                                }
+
+                                ///
+                                try {
+                                  ///do something
+                                  final authResult = await auth.signUp(
+                                      _email.trim(), _password.trim());
+                                  modelHud.changeIsLoading(false);
+
+                                  Navigator.pushReplacementNamed(
+                                      context, HomeScreen.id);
+                                  print(authResult.user.email);
+                                  print(authResult.user.uid);
+
+                                  ///
+                                } catch (ex) {
+                                  modelHud.changeIsLoading(false);
+
+                                  var showToast = Fluttertoast.showToast(
+                                    msg: ex.message.toString(),
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: Colors.white,
+                                    textColor: Colors.black,
+                                    timeInSecForIosWeb: 5,
+                                    fontSize: 18,
+                                  );
+                                  return showToast;
+                                }
+                              }
+                              modelHud.changeIsLoading(false);
+                            },
+                          ),
+                        ),
+                        // SizedBox(height: height * 0.03),
+
+                        ///Text( Do have an account ?)
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, LoginUserScreen.id);
+                          },
+                          child: Row(
+                            // crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Do have an account? ',
+                                style: TextStyle(
+                                    fontSize: widthLocal * 0.04,
+                                    color: Colors.white),
+                              ),
+                              Text(
+                                "Login",
+                                style: TextStyle(
+                                    fontSize: widthLocal * 0.04,
+                                    color: kMainColor),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: height * 0.03),
                       ],
                     ),
                   ),
-                  SizedBox(height: height * 0.02),
-                ],
-              ),
-            )
-          ],
-        ),
+                ),
+              )
+            ],
+          );
+        }),
       ),
     );
   }

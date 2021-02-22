@@ -1,3 +1,4 @@
+import 'package:e_commerce/constans.dart';
 import 'package:e_commerce/model/product_model.dart';
 import 'package:e_commerce/provider/model_hud.dart';
 import 'package:e_commerce/services/storage.dart';
@@ -26,205 +27,241 @@ class _AddProductState extends State<AddProduct> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: Color(0xff325F6D),
-      // backgroundColor: Color(0xff325F6D),
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: ModalProgressHUD(
-        inAsyncCall: Provider.of<ModelHud>(context).isLoading,
-        child: Form(
-          key: _globalKey,
-          child: ListView(
-            children: [
-              Column(
-                children: [
-                  /// Text Add Product
-                  Text(
-                    'Add Product',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 50,
-                      fontFamily: 'pacifico',
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 25),
+    ProductModel arg = ModalRoute.of(context).settings.arguments;
 
-                  /// TextForm Product Name
-                  CustomTextFormWidget(
-                    hint: 'Product Name',
-                    label: null,
-                    obscureText: false,
-                    onChanged: (value) {
-                      _name = value;
-                    },
-                    backgroundColor: Colors.black12,
-                    textColor: Color(0xffC34072),
-                  ),
-                  SizedBox(height: 20),
+    return LayoutBuilder(builder: (context, con) {
+      final height = MediaQuery.of(context).size.height;
+      final width = MediaQuery.of(context).size.width;
+      final heightLocal = con.maxHeight;
+      final widthLocal = con.maxWidth;
+      return Scaffold(
+        resizeToAvoidBottomPadding: false,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            arg != null ? 'Edit Product' : 'Add Product',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: widthLocal * 0.08,
+              fontFamily: 'pacifico',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: ModalProgressHUD(
+          inAsyncCall: Provider.of<ModelHud>(context).isLoading,
+          child: Form(
+            key: _globalKey,
+            child: Column(
+              children: [
+                /// Text Add Product
 
-                  /// TextForm Product Price
-                  CustomTextFormWidget(
-                    hint: 'Product Price',
-                    label: null,
-                    obscureText: false,
-                    onChanged: (value) {
-                      _price = value;
-                    },
-                    backgroundColor: Colors.black12,
-                    textColor: Color(0xffC34072),
-                  ),
-                  SizedBox(height: 20),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ListView(
+                      children: [
+                        SizedBox(height: heightLocal * 0.02),
 
-                  /// TextForm Product Description
-                  CustomTextFormWidget(
-                    hint: 'Product Description',
-                    label: null,
-                    obscureText: false,
-                    onChanged: (value) {
-                      _description = value;
-                    },
-                    backgroundColor: Colors.black12,
-                    textColor: Color(0xffC34072),
-                  ),
-                  SizedBox(height: 20),
+                        /// TextForm Product Name
+                        CustomTextFormWidget(
+                          fontSize: widthLocal * 0.04,
+                          initialText: arg != null ? arg.pName : null,
+                          hint: 'Product Name',
+                          label: null,
+                          obscureText: false,
+                          onChanged: (value) {
+                            _name = value;
+                          },
+                          backgroundColor: kBackgroundColor,
+                          textColor: kScandColor,
+                        ),
+                        SizedBox(height: heightLocal * 0.015),
 
-                  /// TextForm Product Category
-                  CustomTextFormWidget(
-                    hint: 'Product Category',
-                    label: null,
-                    obscureText: false,
-                    onChanged: (value) {
-                      _category = value;
-                    },
-                    backgroundColor: Colors.black12,
-                    textColor: Color(0xffC34072),
-                  ),
-                  SizedBox(height: 20),
+                        /// TextForm Product Price
+                        CustomTextFormWidget(
+                          fontSize: widthLocal * 0.04,
+                          initialText: arg != null ? arg.pPrice : null,
+                          hint: 'Product Price',
+                          label: null,
+                          obscureText: false,
+                          onChanged: (value) {
+                            _price = value;
+                          },
+                          backgroundColor: kBackgroundColor,
+                          textColor: kScandColor,
+                        ),
+                        SizedBox(height: heightLocal * 0.015),
 
-                  Column(
-                    children: [
-                      /// Choose pictures
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              if (Provider.of<StorageImage>(context,
-                                          listen: false)
-                                      .fileImage !=
-                                  null) {
-                                Provider.of<StorageImage>(context, listen: false)
-                                    .openImage(context, null);
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: 'Please Chose image',
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.BOTTOM,
-                                    backgroundColor: Colors.white,
-                                    textColor: Colors.black,
-                                    timeInSecForIosWeb: 5,
-                                    fontSize: 18);
-                              }
-                            },
+                        /// TextForm Product Description
+                        CustomTextFormWidget(
+                          fontSize: widthLocal * 0.04,
+                          initialText: arg != null ? arg.pDescription : null,
+                          hint: 'Product Description',
+                          label: null,
+                          obscureText: false,
+                          onChanged: (value) {
+                            _description = value;
+                          },
+                          backgroundColor: kBackgroundColor,
+                          textColor: kScandColor,
+                        ),
+                        SizedBox(height: heightLocal * 0.015),
 
-                            /// View Product Image
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Provider.of<StorageImage>(context)
-                                          .fileImage ==
-                                      null
-                                  ?
+                        /// TextForm Product Category
+                        CustomTextFormWidget(
+                          fontSize: widthLocal * 0.04,
+                          initialText: arg != null ? arg.pCategory : null,
+                          hint: 'Product Category',
+                          label: null,
+                          obscureText: false,
+                          onChanged: (value) {
+                            _category = value;
+                          },
+                          backgroundColor: kBackgroundColor,
+                          textColor: kScandColor,
+                        ),
+                        SizedBox(height: heightLocal * 0.015),
 
-                                  ///  'Add Product Image '
-                                  Container(
-                                      width: 200,
-                                      height: 150,
-                                      color: Colors.black38,
-                                      child: Center(
-                                          child: Text(
-                                        'Add Product Image ',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
-                                      )),
-                                    )
-                                  : Stack(
-                                      children: [
-                                        Image(
-                                          image: FileImage(
-                                              Provider.of<StorageImage>(context)
-                                                  .fileImage),
-                                          fit: BoxFit.cover,
-                                          width: 200,
-                                          height: 150,
-                                        ),
-                                        Positioned(
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Icon(
-                                                Icons.visibility_sharp,
-                                                size: 25,
-                                                color: Colors.black45,
-                                              ),
-                                            )),
-                                      ],
-                                    ),
-                            ),
-                          ),
-                          // SizedBox(width: 10),
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Color(0xffC34072),
-                            child: IconButton(
-                                color: Colors.white,
-                                icon: Icon(
-                                  Icons.camera_alt,
-                                  size: 25,
-                                ),
-                                onPressed: () {
+                        /// choose image
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (Provider.of<StorageImage>(context,
+                                            listen: false)
+                                        .fileImage !=
+                                    null) {
                                   Provider.of<StorageImage>(context,
                                           listen: false)
-                                      .pickImage(context);
-                                }),
-                          ),
-                          SizedBox(height: 20),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 40),
+                                      .openImage(context, null);
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'Please Chose image',
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.white,
+                                      textColor: Colors.black,
+                                      timeInSecForIosWeb: 5,
+                                      fontSize: 18);
+                                }
+                              },
 
-                  ///Button Add Product
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Builder(
-                      builder: (context) => ButtonCustomWidget(
-                        textbutton: 'Add Product',
-                        onPressed: () {
-                          submitProduct(context);
-                        },
-                        textColor: Colors.white,
-                        backgroundColor: Color(0xffC34072),
-                      ),
+                              /// View Product Image
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Provider.of<StorageImage>(context)
+                                            .fileImage ==
+                                        null
+                                    ?
+
+                                    ///  'Add Product Image '
+                                    Container(
+                                        width: widthLocal * 0.4,
+                                        height: heightLocal * 0.2,
+                                        color: kBackgroundColor,
+                                        child: arg != null
+                                            ? Image(
+                                                image: NetworkImage(
+                                                    arg.pImageLocation),
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Center(
+                                                child: Text(
+                                                'Add Product Image',
+                                                style: TextStyle(
+                                                  fontSize: widthLocal * 0.04,
+                                                ),
+                                              )),
+                                      )
+                                    : Stack(
+                                        children: [
+                                          Image(
+                                            image: FileImage(
+                                                Provider.of<StorageImage>(
+                                                        context)
+                                                    .fileImage),
+                                            fit: BoxFit.cover,
+                                            width: widthLocal * 0.4,
+                                            height: heightLocal * 0.2,
+                                          ),
+                                          Positioned(
+                                              bottom: 0,
+                                              right: 0,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Icon(
+                                                  Icons.visibility_sharp,
+                                                  size: 25,
+                                                  color: Colors.black45,
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                              ),
+                            ),
+
+                            ///  Icons.camera_alt
+                            CircleAvatar(
+                              radius: heightLocal * 0.04,
+                              backgroundColor: kScandColor,
+                              child: IconButton(
+                                  color: kMainColor,
+                                  icon: Icon(
+                                    Icons.camera_alt,
+                                    size: heightLocal * 0.04,
+                                  ),
+                                  onPressed: () {
+                                    Provider.of<StorageImage>(context,
+                                            listen: false)
+                                        .pickImage(context);
+                                  }),
+                            ),
+
+                            SizedBox(height: heightLocal * 0.02),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+
+                ///Button Add Product
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: widthLocal * 0.1,
+                      vertical: heightLocal * 0.02),
+                  child: Builder(
+                    builder: (context) => ButtonCustomWidget(
+                      fontSize: widthLocal * 0.04,
+                      textbutton: arg == null ? 'Add Product' : 'Edit Product',
+                      onPressed: () {
+                        submitProduct(context);
+                      },
+                      textColor: kMainColor,
+                      backgroundColor: kScandColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void submitProduct(BuildContext context) async {
@@ -233,7 +270,8 @@ class _AddProductState extends State<AddProduct> {
     modelHud.changeIsLoading(true);
 
     // ignore: await_only_futures
-    await Provider.of<StorageImage>(context, listen: false).uploadImage(context);
+    await Provider.of<StorageImage>(context, listen: false)
+        .uploadImage(context);
     modelHud.changeIsLoading(true);
     final urlImage = Provider.of<StorageImage>(context, listen: false).url;
 
@@ -261,5 +299,4 @@ class _AddProductState extends State<AddProduct> {
     print(
         ' Url image is :${Provider.of<StorageImage>(context, listen: false).url}');
   }
-
 }

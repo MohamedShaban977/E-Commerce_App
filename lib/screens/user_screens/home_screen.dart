@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomNavyBar(),
+      bottomNavigationBar: CustomNavyBar(context),
       backgroundColor: Color(0xffF5E2C3),
       body: tabs[index],
     );
@@ -59,46 +59,70 @@ class _HomeScreenState extends State<HomeScreen> {
     // print(_loggedUser.email);
   }
 
-  BottomNavyBar CustomNavyBar() {
-    return BottomNavyBar(
-      backgroundColor: Color(0xffF5E2C3),
-      selectedIndex: index,
-      showElevation: true,
-      itemCornerRadius: 10,
-      onItemSelected: (value) {
-        setState(() {
-          index = value;
-        });
-      },
-      items: [
-        BottomNavyBarItem(
-          icon: Icon(
-            Icons.storefront_sharp,
-            color: Colors.orangeAccent,
+  Widget CustomNavyBar(context) {
+    return LayoutBuilder(builder: (context, con) {
+      final height = MediaQuery.of(context).size.height;
+      final width = MediaQuery.of(context).size.width;
+      final heightLocal = con.maxHeight;
+      final widthLocal = con.maxWidth;
+      return BottomNavyBar(
+        backgroundColor: Color(0xffF5E2C3),
+        selectedIndex: index,
+        showElevation: true,
+        itemCornerRadius: widthLocal * 0.03,
+        onItemSelected: (value) {
+          setState(() {
+            index = value;
+          });
+        },
+        items: [
+          BottomNavyBarItem(
+            icon: Icon(
+              Icons.storefront_sharp,
+              color: Colors.orangeAccent,
+            ),
+            title: Text(
+              'Store',
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: widthLocal * 0.03,
+                  fontWeight: FontWeight.bold),
+            ),
+            activeColor: Colors.orange,
+            // inactiveColor: Colors.black87.withOpacity(0.8),
           ),
-          title: Text(
-            'Store',
-            style: TextStyle(
-                color: Colors.orangeAccent,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-          activeColor: Colors.orange,
-          // inactiveColor: Colors.black87.withOpacity(0.8),
-        ),
-        BottomNavyBarItem(
-            icon: Icon(Icons.favorite),
-            title: Text('favorite'),
-            activeColor: Color(0xffDB5758)),
-        BottomNavyBarItem(
-            icon: Icon(Icons.shopping_cart),
-            title: Text('Cart'),
-            activeColor: Colors.orange),
-        BottomNavyBarItem(
-            icon: Icon(Icons.person),
-            title: Text('Profile'),
-            activeColor: Colors.black54),
-      ],
-    );
+          BottomNavyBarItem(
+              icon: Icon(Icons.favorite),
+              title: Text(
+                'favorite',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: widthLocal * 0.03,
+                    fontWeight: FontWeight.bold),
+              ),
+              activeColor: Color(0xffDB5758)),
+          BottomNavyBarItem(
+              icon: Icon(Icons.shopping_cart),
+              title: Text(
+                'Cart',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: widthLocal * 0.03,
+                    fontWeight: FontWeight.bold),
+              ),
+              activeColor: Colors.orange),
+          BottomNavyBarItem(
+              icon: Icon(Icons.person),
+              title: Text(
+                'Profile',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: widthLocal * 0.03,
+                    fontWeight: FontWeight.bold),
+              ),
+              activeColor: Colors.black54),
+        ],
+      );
+    });
   }
 }
